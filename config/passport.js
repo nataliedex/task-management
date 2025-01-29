@@ -1,25 +1,18 @@
-// This needs to be updated with the task management requirements
+// This needs to be updated with the task management 
 
 const LocalStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
 const User = require("../models/User");
-const Organization = require("../models/Organization");
-const { logout } = require("../controllers/auth");
+// const { logout } = require("../controllers/auth");
 
 module.exports = function (passport) {
   passport.use(
     new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
       try {
         let user = await User.findOne({ email: email.toLowerCase() });
-       
-        if(!user){
-          user = await Organization.findOne({ email: email.toLowerCase() });
-        }
-
         if (!user) {
           return done(null, false, { msg: `Email ${email} not found.` });
         }
-
         if (!user.password) {
           return done(null, false, {
             msg:
@@ -45,25 +38,11 @@ module.exports = function (passport) {
   );
 
   passport.serializeUser((user, done) => {
-    const type = user.schema?.path("organization") ? "organization" : "user" ;
-    console.log("type is: ", type);
-    done(null, { id: user.id, type});
-  });
+    done(null, user.id)
+  })
 
 
-  passport.deserializeUser(async (obj, done) => {
-    try {
-      const user =
-        obj.type === "user"
-          ? await User.findById(obj.id)
-          : await Organization.findById(obj.id);
-
-      if (!user) {
-        return done(new Error(`No user found with ID ${obj.id} in ${obj.type}`));
-      }
-      done(null, user);
-    } catch (err) {
-      done(err);
-    }
-  });
+  passport.deserializeUser((id, done) => {
+    User.findById(id, (err, user) => done(err, user))
+  })
 };
