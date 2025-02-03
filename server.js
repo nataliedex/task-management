@@ -13,6 +13,7 @@ const debug = require('debug')('app:session');
 
 // routes
 const mainRoutes = require("./routes/main");
+const scheduleRoutes = require("./routes/schedule");
 
 // use .env file in the config folder
 require('dotenv').config({ path:'./config/.env' });
@@ -64,6 +65,7 @@ app.use(flash());
 
 // setup routes for the server to listen for
 app.use('/', mainRoutes);
+app.use('/schedule', scheduleRoutes);
 
 // server running
 app.listen(process.env.PORT || 8000, () => {
