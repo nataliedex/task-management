@@ -1,7 +1,6 @@
 <%- include('partials/header') -%>
     <main>
         <div class="row justify-content-center">
-            <p>This is a task management application</p>
             <p>This will be the home page</p>
             <section class="col-6 mt-5">
                 <% if (locals.messages.errors) { %> <% messages.errors.forEach( el => { %>
@@ -10,7 +9,6 @@
                 messages.info.forEach( el => { %>
                 <div class="alert alert-info"><%= el.msg %></div>
                 <% }) %> <% } %>
-
 
                 <% if(!user) { %>
                   <form action="/login" method="POST">
