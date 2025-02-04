@@ -6,7 +6,7 @@ const upload = require('../middleware/multer');
 const { schema } = require('../models/User');
 
 // schedule routes
-router.get('/', schdeuleController.getSchedule);
+router.get('/', ensureAuth, schdeuleController.getSchedule);
 
 
-module.exports = router;
+module.exports = router
