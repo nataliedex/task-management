@@ -26,56 +26,50 @@ module.exports = {
             return res.status(500).send("error occured during login");
         }
     },
-    postLogin: async(req, res) => {
-        try{
+    postLogin: async(req, res, next) => {
+        try {
             const validationErrors = [];
             if (!validator.isEmail(req.body.email))
                 validationErrors.push({ msg: "Please enter a valid email address." });
             if (validator.isEmpty(req.body.password))
                 validationErrors.push({ msg: "Password cannot be blank." });
 
-        if (validationErrors.length) {
-            req.flash("errors", validationErrors);
-            return res.redirect("/login");
+            if (validationErrors.length) {
+                req.flash("errors", validationErrors);
+                return res.redirect("/login");
+            }
+            req.body.email = validator.normalizeEmail(req.body.email, {
+                gmail_remove_dots: false,
+            });
+
+            passport.authenticate("local", (err, user, info) => {
+                if (err) {
+                    return next(err);
+                }
+                if (!user) {
+                    req.flash("errors", info);
+                    return res.redirect("/");
+                }
+            req.logIn(user, (err) => {
+                if (err) {
+                console.error("Login error:", err);
+                return next(err);
+                }
+                req.flash("success", { msg: "Success! You are logged in." });
+
+            // Log session and user info for debugging
+            console.log("Logged-in user:", req.user);
+            console.log("Session details:", req.session);
+
+            const redirectPath = req.session.returnTo || "/schedule";
+            req.session.returnTo = null;
+            res.redirect(redirectPath);
+            });
+            })(req, res, next);
+        } catch(err) {
+            console.error('Login Error:', err);
+            return res.status(500).send('An error occured during login');
         }
-        req.body.email = validator.normalizeEmail(req.body.email, {
-            gmail_remove_dots: false,
-        });
-
-        passport.authenticate("local", (err, user, info) => {
-            if (err) {
-            return next(err);
-            }
-            if (!user) {
-            req.flash("errors", info);
-            return res.redirect("/");
-            }
-
-        return new Promise((resolve, reject) => {
-        req.logIn(user, (err) => {
-            if (err) {
-            console.error("Login error:", err);
-            return reject(err);
-            }
-            req.flash("success", { msg: "Success! You are logged in." });
-
-        // Log session and user info for debugging
-        console.log("Logged-in user:", req.user);
-        console.log("Session details:", req.session);
-
-        const redirectPath = "/schedule";
-        const finalRedirect = req.session.returnTo || redirectPath;
-
-        req.session.returnTo = null;
-        res.redirect(finalRedirect);
-        resolve();
-        });
-        });
-    });
-    }catch(err){
-        console.log(err);
-        return res.status(500).send("error occured during login");
-    }       
     },
 
     logout: async(req, res) => {
