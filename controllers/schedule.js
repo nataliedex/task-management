@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Project = require("../models/Project");
 const Task = require("../models/Task");
+const mongoose = require('mongoose');
 
 module.exports = {
     getSchedule: async(req, res) => {
@@ -25,7 +26,7 @@ module.exports = {
                 createdBy: req.user._id,
             });
             console.log('Project has been added');
-            res.redirect('/schedule', { user: req.user });
+            res.redirect('/schedule' );
         } catch(err){
             console.log(err);
             res.status(500).send('Server Error');
@@ -37,18 +38,19 @@ module.exports = {
             if(!req.user || !req.user._id){
                 throw new Error('User not authenticated');
             }
-            const projects = await Project.find();
+            const { title, description, assignedTo, priority, dueDate, projectId } = req.body
             await Task.create({
-                title: req.body.title,
-                description: req.body.description,
-                assignedTo: req.body.assignedTo,
-                priority: req.body.priority,
-                dueDate: req.body.dueDate,
+                title: title,
+                description: description,
+                assignedTo: new mongoose.Types.ObjectId(assignedTo),
+                priority: priority,
+                dueDate: dueDate,
                 createdBy: req.user._id,
-                projectId: req.body.projectId,
+                projectId: new mongoose.Types.ObjectId(projectId),
             });
+
             console.log('Project has been added');
-            res.redirect('/schedule', { user: req.user, projects: projects });
+            res.redirect('/schedule');
         } catch(err){
             console.log(err);
             res.status(500).send('Server Error');

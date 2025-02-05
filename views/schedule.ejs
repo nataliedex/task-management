@@ -31,7 +31,7 @@
                             <select class="form-control" id="projectId" name="projectId">
                                 <option label=" "></option>
                                 <% for(let i = 0; i < projects.length; i++){ %>
-                                    <option value="<%= projects[i].title %>"><%= projects[i].title %></option>
+                                    <option value="<%= projects[i]._id %>"><%= projects[i].title %></option>
                                 <% } %>
                             </select>
                         </div>
@@ -48,7 +48,7 @@
                             <select class="form-control" id="assignedTo" name="assignedTo">
                                 <option label=" "></option>
                                 <% for(let i = 0; i < users.length; i++){ %>
-                                    <option value="<%= users[i].name %>"><%= users[i].name %></option>
+                                    <option value="<%= users[i]._id %>"><%= users[i].name %></option>
                                 <% } %>
                             </select>
                         </div>
