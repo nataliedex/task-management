@@ -1,0 +1,21 @@
+.column-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px;
+    gap: 10px;
+}
+
+.box {
+    padding: 10px;
+
+}
+
+
+.create-container,
+.task-list-container {
+    flex: 1;
+    max-width: 50%; /* Increase width */
+    min-width: 400px; /* Prevent collapsing on smaller screens */
+}
+

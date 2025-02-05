@@ -8,7 +8,8 @@ module.exports = {
         try{
             const users = await User.find();
             const projects = await Project.find();
-            res.render('schedule.ejs', { user: req.user, users: users, projects: projects});
+            const tasks = await Task.find({ assignedTo: req.user._id }).populate('createdBy', 'name');
+            res.render('schedule.ejs', { user: req.user, users, projects, tasks });
         } catch(err){
             console.log(err);
             res.status(500).send('Server Error');
