@@ -1,127 +1,227 @@
 <%- include('partials/header') -%>
 <main>
-    <div class="column-container">
-        <div class="box create-container">
-            <section class="create-project">
-                <div class="row justify-content-center">
-                    <div class="col-6 mt-5">
-                        <h2>Create a New Project</h2>
-                        <form action="/schedule/createProject" method="POST">
-                            <div class="mb-3">
-                                <label for="title" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="title" name="title">
-                            </div>
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" id="description" name="description"></textarea>
-                            </div>
-                            <button type="submit" class="btn bg-info" style="color:white" value="Upload">Submit</button>
-                        </form>
-                    </div>
-                </div>
-            </section>
-        
-            <section class="create-task">
-                <div class="row justify-content-center">
-                    <div class="col-6 mt-5">
-                        <h2>Create a New Task</h2>
-                        <form action="/schedule/createTask" method="POST">
-                            <div class="mb-3">
-                                <label for="projectId" class="form-label">Project</label>
-                                <select class="form-control" id="projectId" name="projectId">
-                                    <option label=" "></option>
-                                    <% for(let i = 0; i < projects.length; i++){ %>
-                                        <option value="<%= projects[i]._id %>"><%= projects[i].title %></option>
-                                    <% } %>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="title" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="title" name="title">
-                            </div>
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" id="description" name="description"></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="assignedTo" class="form-label">Assigned To</label>
-                                <select class="form-control" id="assignedTo" name="assignedTo">
-                                    <option label=" "></option>
-                                    <% for(let i = 0; i < users.length; i++){ %>
-                                        <option value="<%= users[i]._id %>"><%= users[i].name %></option>
-                                    <% } %>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="priority" class="form-label">Priority</label>
-                                <select class="form-control" id="priority" name="priority">
-                                    <option value="low">Low</option>
-                                    <option value="medium" selected>Medium</option>
-                                    <option value="high">High</option>
-                                    <option value="critical">Critical</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="dueDate" class="form-label">Due Date</label>
-                                <input type="date" class="form-control" id="dueDate" name="dueDate">
-                            </div>
-                            <button type="submit" class="btn bg-info" style="color:white" value="Upload">Submit</button>
-                        </form>
-                    </div>
-                </div>      
-            </section>
-        </div>
-
-        <div class="box task-list-container">
-            <section class="task-list">
-                <div class="row justify-content-center">
-                    <div class="col-6 mt-5">
-                        <h2><%= user.name %>'s Task List</h2>
-                        <!-- bootstrap accordion -->
-                        <div class="accordion" id="accordionPanelsStayOpenExample">
-                            <% for(let i = 0; i < tasks.length; i++) { %>
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>">
-                                            <strong><%= tasks[i].title %></strong>
-                                      </button>
-                                    </h2>
-                                    <div id="collapse<%= i %>" class="accordion-collapse collapse">
-                                      <div class="accordion-body">
-                                        <p><%= tasks[i].description %></p>
-                                        <table class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Created By</th>
-                                                    <th>Priority</th>
-                                                    <th>Due Date</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="table-primary"><%= tasks[i].createdBy.name %></td>
-                                                    <td class="table-primary"><%= tasks[i].priority %></td>
-                                                    <td class="table-primary"><%= tasks[i].dueDate.toLocaleDateString('en-US') %></td>
-                                                </tr>
-                                            </tbody> 
-                                        </table>
-                                      </div>
-                                    </div>
+    <section class="task-list">
+        <div class="row justify-content-center">
+            <div class="col-6 mt-5">
+                <h2><%= user.name %>'s Task List</h2>
+                <!-- bootstrap accordion -->
+                <div class="accordion" id="accordionPanelsStayOpenExample">
+                    <% for(let i = 0; i < tasks.length; i++) { %>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>">
+                                    <strong><%= tasks[i].title %></strong>
+                                </button>
+                            </h2>
+                            <div id="collapse<%= i %>" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                <p><%= tasks[i].description %></p>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Created By</th>
+                                            <th>Priority</th>
+                                            <th>Due Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="table-primary"><%= tasks[i].createdBy.name %></td>
+                                            <td class="table-primary"><%= tasks[i].priority %></td>
+                                            <td class="table-primary"><%= tasks[i].dueDate.toLocaleDateString('en-US') %></td>
+                                        </tr>
+                                    </tbody> 
+                                </table>
                                 </div>
-                            <% } %>
+                            </div>
                         </div>
-                    </div>
+                    <% } %>
                 </div>
-            </section>
+            </div>
         </div>
+    </section>
 
-    </div>
+    <section id="all-projects">
+        <div class="row justify-content-center">
+            <div class="col-6 mt-5">
+                <h2>List of all Open Projects</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Project</th>
+                            <th>Task</th>
+                            <th>Assigned To</th>
+                            <th>Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let i = 0; i < allTasks.length; i++){ %>
+                            <tr>
+                                <td><%= allTasks[i].projectId.title %></td>
+                                <td><%= allTasks[i].title %></td>
+                                <td><%= allTasks[i].assignedTo.name %></td>
+                                <td><%= allTasks[i].dueDate.toLocaleDateString('en-US') %></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- bootstrap modal for adding a project and creating a task -->
+    <div id="add-project" class="modal fade modal-content rounded-4 shadow create-project">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header p-5 pb-4 border-bottom-0">
+                    <h1 class="fw-bold mb-0 fs-2">Add a New Project</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-5 pt-0">
+                <form action="/schedule/createProject" method="POST">
+                    <div class="form-floating mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control rounded-3" id="title" name="title">
+                    </div>
+                    <div class="form-floating mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control rounded-3" id="description" name="description"></textarea>
+                    </div>
+                    <button class="w-100 mb-2 btn btn-lg rounded-3 bg-info" style="color:white" type="submit">Submit</button>
+                </form>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div id="add-task" class="modal fade modal-content rounded-4 shadow create-task">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header p-5 pb-4 border-bottom-0">
+                    <h1 class="fw-bold mb-0 fs-2">Add a New Task</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-5 pt-0">
+                <form action="/schedule/createTask" method="POST">
+                    <div class="form-floating mb-3">
+                        <label for="projectId" class="form-label">Project</label>
+                        <select class="form-control rounded-3" id="projectId" name="projectId">
+                            <option label=" "></option>
+                            <% for(let i = 0; i < projects.length; i++){ %>
+                                <option value="<%= projects[i]._id %>"><%= projects[i].title %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input class="form-control rounded-3" id="title" name="title"></input>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control rounded-3" id="description" name="description"></textarea>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <label for="assignedTo" class="form-label">Assigned To</label>
+                        <select class="form-control rounded-3" id="assignedTo" name="assignedTo">
+                            <option label=" "></option>
+                            <% for(let i = 0; i < users.length; i++){ %>
+                                <option value="<%= users[i]._id %>"><%= users[i].name %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <label for="priority" class="form-label">Priority</label>
+                        <select class="form-control rounded-3" id="priority" name="priority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <label for="dueDate" class="form-label">Due Date</label>
+                        <input type="date" class="form-control rounded-3" id="dueDate" name="dueDate"></input>
+                    </div>
+                    <button class="w-100 mb-2 btn btn-lg rounded-3 bg-info" style="color:white" type="submit">Submit</button>
+                </form>
+                </div>
+            </div>
+        </div>
+      </div>
+
+<!-- End of bootstrap model -->
 
 
-    
+    <!-- <section  class="create-project">
+        <div class="row justify-content-center">
+            <div class="col-6 mt-5">
+                <h2>Create a New Project</h2>
+                <form action="/schedule/createProject" method="POST">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description"></textarea>
+                    </div>
+                    <button type="submit" class="btn bg-info" style="color:white" value="Upload">Submit</button>
+                </form>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- <section id="add-task" class="create-task">
+        <div class="row justify-content-center">
+            <div class="col-6 mt-5">
+                <h2>Create a New Task</h2>
+                <form action="/schedule/createTask" method="POST">
+                    <div class="mb-3">
+                        <label for="projectId" class="form-label">Project</label>
+                        <select class="form-control" id="projectId" name="projectId">
+                            <option label=" "></option>
+                            
+                            !!!!!FOR LOOP -- ADD BACK IF NEEDED!!!!
+
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="title" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="assignedTo" class="form-label">Assigned To</label>
+                        <select class="form-control" id="assignedTo" name="assignedTo">
+                            <option label=" "></option>
 
 
-    
-    
+                            !!!!!FOR LOOP -- ADD BACK IF NEEDED!!!!!
+
+
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="priority" class="form-label">Priority</label>
+                        <select class="form-control" id="priority" name="priority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dueDate" class="form-label">Due Date</label>
+                        <input type="date" class="form-control" id="dueDate" name="dueDate">
+                    </div>
+                    <button type="submit" class="btn bg-info" style="color:white" value="Upload">Submit</button>
+                </form>
+            </div>
+        </div>      
+    </section>   -->
 </main>
 <%- include('partials/footer') -%>
