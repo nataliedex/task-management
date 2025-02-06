@@ -19,3 +19,7 @@
     min-width: 400px; /* Prevent collapsing on smaller screens */
 }
 
+
+.form-floating label {
+    margin-top: -5px; 
+}

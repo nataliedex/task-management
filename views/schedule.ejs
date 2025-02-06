@@ -71,9 +71,9 @@
     </section>
 
     <!-- bootstrap modal for adding a project and creating a task -->
-    <div id="add-project" class="modal fade modal-content rounded-4 shadow create-project">
+    <div id="add-project" class="modal fade">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content rounded-4 shadow create-project">
                 <div class="modal-header p-5 pb-4 border-bottom-0">
                     <h1 class="fw-bold mb-0 fs-2">Add a New Project</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -81,12 +81,12 @@
                 <div class="modal-body p-5 pt-0">
                 <form action="/schedule/createProject" method="POST">
                     <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-3 pt-3" id="title" name="title" placeholder="Project Title">
                         <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control rounded-3" id="title" name="title">
                     </div>
                     <div class="form-floating mb-3">
+                        <textarea class="form-control rounded-3 pt-3" id="description" name="description"></textarea>
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control rounded-3" id="description" name="description"></textarea>
                     </div>
                     <button class="w-100 mb-2 btn btn-lg rounded-3 bg-info" style="color:white" type="submit">Submit</button>
                 </form>
@@ -95,9 +95,9 @@
         </div>
       </div>
 
-      <div id="add-task" class="modal fade modal-content rounded-4 shadow create-task">
+      <div id="add-task" class="modal fade ">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content rounded-4 shadow create-task">
                 <div class="modal-header p-5 pb-4 border-bottom-0">
                     <h1 class="fw-bold mb-0 fs-2">Add a New Task</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -105,43 +105,43 @@
                 <div class="modal-body p-5 pt-0">
                 <form action="/schedule/createTask" method="POST">
                     <div class="form-floating mb-3">
-                        <label for="projectId" class="form-label">Project</label>
-                        <select class="form-control rounded-3" id="projectId" name="projectId">
+                        <select class="form-control rounded-3 pt-3" id="projectId" name="projectId">
                             <option label=" "></option>
                             <% for(let i = 0; i < projects.length; i++){ %>
                                 <option value="<%= projects[i]._id %>"><%= projects[i].title %></option>
                             <% } %>
                         </select>
+                        <label for="projectId" class="form-label">Project</label>
                     </div>
                     <div class="form-floating mb-3">
+                        <input class="form-control rounded-3 pt-3" id="title" name="title"></input>
                         <label for="title" class="form-label">Title</label>
-                        <input class="form-control rounded-3" id="title" name="title"></input>
                     </div>
                     <div class="form-floating mb-3">
+                        <textarea class="form-control rounded-3 pt-3" id="description" name="description"></textarea>
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control rounded-3" id="description" name="description"></textarea>
                     </div>
                     <div class="form-floating mb-3">
-                        <label for="assignedTo" class="form-label">Assigned To</label>
-                        <select class="form-control rounded-3" id="assignedTo" name="assignedTo">
+                        <select class="form-control rounded-3 pt-3" id="assignedTo" name="assignedTo">
                             <option label=" "></option>
                             <% for(let i = 0; i < users.length; i++){ %>
                                 <option value="<%= users[i]._id %>"><%= users[i].name %></option>
                             <% } %>
                         </select>
+                        <label for="assignedTo" class="form-label">Assigned To</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <label for="priority" class="form-label">Priority</label>
-                        <select class="form-control rounded-3" id="priority" name="priority">
+                        <select class="form-control rounded-3 pt-3" id="priority" name="priority">
                             <option value="low">Low</option>
                             <option value="medium" selected>Medium</option>
                             <option value="high">High</option>
                             <option value="critical">Critical</option>
                         </select>
+                        <label for="priority" class="form-label">Priority</label>
                     </div>
                     <div class="form-floating mb-3">
+                        <input type="date" class="form-control rounded-3 pt-3" id="dueDate" name="dueDate"></input>
                         <label for="dueDate" class="form-label">Due Date</label>
-                        <input type="date" class="form-control rounded-3" id="dueDate" name="dueDate"></input>
                     </div>
                     <button class="w-100 mb-2 btn btn-lg rounded-3 bg-info" style="color:white" type="submit">Submit</button>
                 </form>
