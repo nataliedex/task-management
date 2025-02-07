@@ -45,11 +45,12 @@
                                                 <tr id="task-desc-<%= index %>-<%= taskIndex %>" class="accordion-collapse collapse">
                                                     <td colspan="5">
                                                         <div class="accordion-body">
-                                                            <form id="updated-description-form" action="/schedule/updateTaskDesc" method="POST">
-                                                                <p id="current-description"><%= task.description %></p>
-                                                                <button id="update-task-description" class="w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: block;" type="submit">Add Notes</button>
-                                                                <button id="save-button" class="w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Save</button>
-                                                                <button id="exit-button" class="w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Exit</button>
+                                                            <form  id="updated-description-form" action="/schedule/updateTaskDesc" method="POST">
+                                                                <p  class="task" id="current-description"><%= task.description %></p>
+                                                                <textarea class="task-input" name="description" style="display: none;" value="<%= task.id %>"><%= task.description %></textarea>
+                                                                <button class="edit-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: block;" type="submit">Add Notes</button>
+                                                                <button class="save-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Save</button>
+                                                                <button class="exit-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Exit</button>
                                                             </form>
                                                             
                                                         </div>
