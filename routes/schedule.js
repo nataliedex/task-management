@@ -9,6 +9,7 @@ const { schema } = require('../models/User');
 router.get('/', ensureAuth, schdeuleController.getSchedule);
 router.post('/createProject', schdeuleController.createProject);
 router.post('/createTask', schdeuleController.createTask);
+router.post('/updateTaskDesc', schdeuleController.updateTaskDesc);
 
 
 module.exports = router

@@ -18,7 +18,8 @@ module.exports = {
             });
     
             const tasks = await Task.find({ assignedTo: req.user._id })
-                .populate('createdBy', 'name');    
+                .populate('createdBy', 'name')
+                .populate('projectId', 'title description');
             res.render('schedule.ejs', { user: req.user, users, projects, tasks, allTasks });
         } catch(err){
             console.log(err);
@@ -67,4 +68,24 @@ module.exports = {
             res.status(500).send('Server Error');
         }
     },
+    updateTaskDesc: async (req, res) => {
+        try{
+          const { description, taskId } = req.body;
+          const updateTask = await Task.findOneAndUpdate(
+            taskId,
+            { $set: { description } },
+            { new: true }
+          );
+
+          if(!updateTask){
+            return res.status(404).send("Task not found");
+          }
+        
+          res.redirect('/schedule');
+        } catch (err) {
+          console.error("Error updating task", err);
+          res.status(500).send("Server Error");
+        }
+      },
+    
 }
