@@ -1,27 +1,51 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const taskDescription = document.querySelectorAll(".task-description");
+    
     const editButton = document.querySelectorAll(".edit-button");
 
-    const saveButton = document.querySelectorAll(".save-button");
-    const exitButton = document.querySelectorAll(".exit-button");
-    const taskInput = document.querySelectorAll(".task-input");
-    
     editButton.forEach(button => {
         button.addEventListener('click', (event) => {
             event.preventDefault();
             console.log("clicked");
 
-            const task = button.parentElement;
-            console.log(task);
+            const task = button.closest(".task");
 
-            // taskDescription.style.display = "none";
-            // editButton.style.display = "none";
+            const taskDescription = task.querySelector(".task-description");
+            const saveButton = task.querySelector(".save-button");
+            const exitButton = task.querySelector(".exit-button");
+            const taskInput = task.querySelector(".task-input");
 
-            // saveButton.style.display = "block";
-            // exitButton.style.display = "block";
-            // taskInput.style.display = "block";
+            taskDescription.style.display = "none";
+            button.style.display = "none";
+            saveButton.style.display = "inline-block";
+            exitButton.style.display = "inline-block";
+            taskInput.style.display = "block";
         });
     });
-    
+
+    // Save Button clicks
+    document.querySelectorAll(".save-button").forEach(saveButton => {
+
+    });
+
+// Exit Button clicks
+    document.querySelectorAll(".exit-button").forEach(exitButton => {
+        exitButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            console.log("exit button clicked");
+
+            const task = exitButton.closest(".task");
+            const taskDescription = task.querySelector(".task-description");
+            const editButton = task.querySelector(".edit-button");
+            const saveButton = task.querySelector(".save-button");
+            const taskInput = task.querySelector(".task-input");
+            
+            taskDescription.style.display = "block";
+            editButton.style.display = "block";
+            saveButton.style.display = "none";
+            exitButton.style.display = "none";
+            taskInput.style.display = "none";
+
+        });
+    });
 });
 

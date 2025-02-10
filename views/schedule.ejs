@@ -48,6 +48,7 @@
                                                             <form  id="updated-description-form" action="/schedule/updateTaskDesc" method="POST">
                                                                 <div class="task">
                                                                     <p  class="task-description" id="current-description"><%= task.description %></p>
+                                                                    <input type="hidden" name="taskId" value="<%= task.id %>">
                                                                     <textarea class="task-input" name="description" style="display: none;" value="<%= task.id %>"><%= task.description %></textarea>
                                                                     <button class="edit-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: block;" type="submit">Add Notes</button>
                                                                     <button class="save-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Save</button>
