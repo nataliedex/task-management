@@ -71,8 +71,10 @@ module.exports = {
     updateTaskDesc: async (req, res) => {
         try{
           const { description, taskId } = req.body;
+          const objectId = new mongoose.Types.ObjectId(taskId);
+        
           const updateTask = await Task.findOneAndUpdate(
-            taskId,
+            { _id: objectId },
             { $set: { description } },
             { new: true }
           );

@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    const editButton = document.querySelectorAll(".edit-button");
 
-    editButton.forEach(button => {
+    document.querySelectorAll(".edit-button").forEach(button => {
         button.addEventListener('click', (event) => {
             event.preventDefault();
-            console.log("clicked");
+            console.log("edit button clicked");
 
             const task = button.closest(".task");
 
@@ -24,7 +22,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Save Button clicks
     document.querySelectorAll(".save-button").forEach(saveButton => {
+        saveButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            console.log("save button clicked");
 
+            const task = saveButton.closest(".task");
+            const form = task.closest("form");
+            const taskInput = task.querySelector(".task-input");
+            const taskDescription = task.querySelector(".task-description");
+
+            const exitButton = task.querySelector(".exit-button");
+            const editButton = task.querySelector(".edit-button");
+
+            taskDescription.textContent = taskInput.value;
+
+            task.style.display = "none";
+            exitButton.style.display = "none";
+            taskInput.style.display = "none";
+            taskDescription.style.display = "block";
+            editButton.style.display = "block";
+
+            form.submit();  
+        });
     });
 
 // Exit Button clicks

@@ -45,7 +45,7 @@
                                                 <tr id="task-desc-<%= index %>-<%= taskIndex %>" class="accordion-collapse collapse">
                                                     <td colspan="5">
                                                         <div class="accordion-body">
-                                                            <form  id="updated-description-form" action="/schedule/updateTaskDesc" method="POST">
+                                                            <form  id="updated-description-form" action="/schedule/updateTaskDesc/<%= task.id %>" method="POST">
                                                                 <div class="task">
                                                                     <p  class="task-description" id="current-description"><%= task.description %></p>
                                                                     <input type="hidden" name="taskId" value="<%= task.id %>">
