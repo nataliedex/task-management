@@ -8,7 +8,7 @@ module.exports = {
         try{
             const users = await User.find();
             const projects = await Project.find();
-            const allTasks = await Task.find()
+            const allTasks = await Task.find( { status: "To Do" })
                 .populate('assignedTo', 'name')
                 .populate('projectId', 'title');
             allTasks.sort((a,b) => {

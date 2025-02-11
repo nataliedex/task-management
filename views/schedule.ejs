@@ -3,7 +3,13 @@
     <section class="task-list">
         <div class="row justify-content-center">
             <div class="col-6 mt-5">
-                <h2><%= user.name %>'s Task List</h2>
+                <span><h2><%= user.name %>'s Task List</h2>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Completed</label>
+                      </div>
+                </span>
+                 
                 <!-- bootstrap accordion -->
                 <div class="accordion" id="accordionPanelsStayOpenExample">
                     <% projects.forEach((project, index) => { %>
