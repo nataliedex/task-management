@@ -66,5 +66,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         });
     });
+
+    document.querySelectorAll(".task-title").forEach(link => {
+        link.addEventListener("click", () => {
+            console.log("click task");
+            document.getElementById("modal-task-title").textContent = this.dataset.title;
+            document.getElementById("modal-project").textContent = this.dataset.project;
+            document.getElementById("modal-createdby").textContent = this.dataset.createdby;
+            document.getElementById("modal-priority").textContent = this.dataset.priority;
+            document.getElementById("modal-duedate").textContent = this.dataset.duedate;
+        });
+    });
 });
 

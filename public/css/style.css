@@ -23,3 +23,13 @@
 .form-floating label {
     margin-top: -5px; 
 }
+
+.task-title {
+   text-decoration: none; 
+   color: black;
+}
+
+.task-title:hover {
+    cursor: pointer;
+    color: rgb(13 202 240);
+}
