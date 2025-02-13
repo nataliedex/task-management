@@ -32,8 +32,7 @@
                                     data-bs-toggle="modal" 
                                     data-bs-target="#edit-task"
                                     data-title="<%= task.title %>"
-                                    data-project="<%= task.project %>"
-                                    data-createdby="<%= task.createdBy.name %>"
+                                    data-description="<%= task.description %>"
                                     data-priority="<%= task.priority %>"
                                     data.duedate="<%= task.dueDate.toISOString().split('T')[0] %>">
                                     <%= task.title %>
@@ -45,10 +44,15 @@
                             <td><%= task.dueDate.toLocaleDateString('en-US') %></td>
                             <td><input type="checkbox" name="complete"></td>
                         </tr>
+
+                        
                         
                         <% }); %>  
                     </tbody>
                 </table>
+
+                
+
                  <% } %>
                 <% }); %>
             </div>
@@ -165,24 +169,26 @@
         </div>
       </div>
 
-
+      <!-- modal for the task  -->
+    <% tasks.forEach(task => { %>
       <div id="edit-task" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content rounded-4 shadow create-project">
                 <div class="modal-header p-5 pb-4 border-bottom-0">
-                    <h1 class="fw-bold mb-0 fs-2"><span id="modal-task-title"></span><%= task.title %></h1>
+                    <h1 class="fw-bold mb-0 fs-2"><span id="modal-task-title"></span></h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-5 pt-0">
                     <form  id="updated-description-form" action="/schedule/updateTaskDesc/<%= task.id %>" method="POST">
                         <div class="task">
-                            <p><strong>Project:</strong> <span id="modal-project"></span></p>
-                            <p><strong>Created By:</strong> <span id="modal-createdby"></span></p>
                             <p><strong>Priority:</strong> <span id="modal-priority"></span></p>
-                            <p><strong>Due Date:</strong> <span id="modal-duedate"></span></p>
-                            <p  class="task-description" id="current-description"><%= task.description %></p>
+                            <p>
+                                <strong>Due Date:</strong> 
+                                <span style="color: <%= new Date() < new Date(task.dueDate) ? 'red' : 'green' %>" id="modal-duedate"></span>
+                            </p>
+                            <p  class="task-description" id="modal-description"><%= task.description %></p>
                             <input type="hidden" name="taskId" value="<%= task.id %>">
-                            <textarea class="task-input" name="description" style="display: none;" value="<%= task.id %>"><%= task.description %></textarea>
+                            <textarea id="modal-textarea" class="task-input w-100 mb-2 rounded-3" name="description" style="display: none;" value="<%= task.id %>"><%= task.description %></textarea>
                             <button class="edit-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: block;" type="submit">Add Notes</button>
                             <button class="save-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Save</button>
                             <button class="exit-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Exit</button>
@@ -192,7 +198,11 @@
                 </div>
             </div>
         </div>
-      </div>
+    </div>
+    <% }); %>
+
+
+      
 
 <!-- End of bootstrap model -->
 

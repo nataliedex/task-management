@@ -67,14 +67,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.querySelectorAll(".task-title").forEach(link => {
-        link.addEventListener("click", () => {
-            console.log("click task");
-            document.getElementById("modal-task-title").textContent = this.dataset.title;
-            document.getElementById("modal-project").textContent = this.dataset.project;
-            document.getElementById("modal-createdby").textContent = this.dataset.createdby;
-            document.getElementById("modal-priority").textContent = this.dataset.priority;
-            document.getElementById("modal-duedate").textContent = this.dataset.duedate;
+    document.querySelectorAll(".task-title").forEach(task => {
+        task.addEventListener("click", function () {
+            const title = this.getAttribute("data-title");
+            const description = this.getAttribute("data-description");
+            const priority = this.getAttribute("data-priority");
+            const dueDate = this.getAttribute("data-duedate");
+
+            document.getElementById("modal-task-title").textContent = title;
+            document.getElementById("modal-description").textContent = description;
+            document.getElementById("modal-priority").textContent = priority;
+            document.getElementById("modal-duedate").textContent = dueDate.toLocaleDateString('en-US');
+            document.getElementById("modal-textarea").textContent = description;
         });
     });
 });
