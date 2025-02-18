@@ -23,6 +23,7 @@
                             <th>Due Date</th>
                             <th>Complete</th>
                         </tr>
+                    
                     </thead>
                     <tbody>
                         <% projectTasks.forEach((task, taskIndex) => { %>
@@ -43,6 +44,20 @@
                             <td><%= task.priority %></td>
                             <td><%= task.dueDate.toLocaleDateString('en-US') %></td>
                             <td><input type="checkbox" name="complete"></td>
+                        </tr>
+        
+                        <tr>
+                            <td colspan="6" value="<%= task.description %>" display="none" class="update-task">
+                                <form  id="updated-description-form" action="/schedule/updateTaskDesc/<%= task.id %>" method="POST">
+                                    <div class="task">
+                                        <p display="block" class="task-description" value="<%= task.description %>"><%= task.description %></p>
+                                        <input type="hidden" name="taskId" value="<%= task.id %>">
+                                        <textarea id="edit-text" class="task-input w-100 mb-2 rounded-3" name="description" style="display: none;" value="<%= task.id %>"></textarea>
+                                        <button class="save-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Save</button>
+                                        <button class="exit-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Exit</button>
+                                    </div>
+                                </form>
+                            </td>
                         </tr>
 
                         
@@ -72,6 +87,7 @@
                             <th>Assigned To</th>
                             <th>Due Date</th>
                         </tr>
+                        
                     </thead>
                     <tbody>
                         <% for(let i = 0; i < allTasks.length; i++){ %>
@@ -81,6 +97,7 @@
                                 <td><%= allTasks[i].assignedTo.name %></td>
                                 <td><%= allTasks[i].dueDate.toLocaleDateString('en-US') %></td>
                             </tr>
+                    
                         <% } %>
                     </tbody>
 
@@ -181,14 +198,10 @@
                 <div class="modal-body p-5 pt-0">
                     <form  id="updated-description-form" action="/schedule/updateTaskDesc/<%= task.id %>" method="POST">
                         <div class="task">
-                            <p><strong>Priority:</strong> <span id="modal-priority"></span></p>
-                            <p>
-                                <strong>Due Date:</strong> 
-                                <span style="color: <%= new Date() < new Date(task.dueDate) ? 'red' : 'green' %>" id="modal-duedate"></span>
-                            </p>
+                        
                             <p  class="task-description" id="modal-description"><%= task.description %></p>
                             <input type="hidden" name="taskId" value="<%= task.id %>">
-                            <textarea id="modal-textarea" class="task-input w-100 mb-2 rounded-3" name="description" style="display: none;" value="<%= task.id %>"><%= task.description %></textarea>
+                            <textarea id="modal-textarea" class="task-input w-100 mb-2 rounded-3" name="description" style="display: none;" value="<%= task.id %>"></textarea>
                             <button class="edit-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: block;" type="submit">Add Notes</button>
                             <button class="save-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Save</button>
                             <button class="exit-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Exit</button>

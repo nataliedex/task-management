@@ -1,85 +1,43 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    document.querySelectorAll(".edit-button").forEach(button => {
-        button.addEventListener('click', (event) => {
-            event.preventDefault();
-            console.log("edit button clicked");
+    document.querySelectorAll(".task-description").forEach(desc => {
+        desc.addEventListener("click", (e) => {
+            e.preventDefault();
+            console.log("description clicked");
+            desc.style.display = "none";
 
-            const task = button.closest(".task");
+            const row = e.target.closest(".update-task"); // Get the closest row
+            const editText = row.querySelector(".task-input"); // Get textarea in this row
+            const saveButton = row.querySelector(".save-button");
+            const exitButton = row.querySelector(".exit-button");
+            const form = row.closest("form");
 
-            const taskDescription = task.querySelector(".task-description");
-            const saveButton = task.querySelector(".save-button");
-            const exitButton = task.querySelector(".exit-button");
-            const taskInput = task.querySelector(".task-input");
+            desc.style.display = "none";
+            editText.style.display = "block";
+            editText.value = desc.innerText;
+            saveButton.style.display = "block";
+            exitButton.style.display = "block";
 
-            taskDescription.style.display = "none";
-            button.style.display = "none";
-            saveButton.style.display = "inline-block";
-            exitButton.style.display = "inline-block";
-            taskInput.style.display = "block";
+            exitButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                console.log("Exit button clicked");
+    
+                // Revert to original state
+                editText.style.display = "none";
+                saveButton.style.display = "none";
+                exitButton.style.display = "none";
+                desc.style.display = "block";
+            });
+    
+            saveButton.addEventListener("click", () => {
+                console.log("Save button clicked");
+
+                desc.innerText = editText.value; 
+
+                form.submit();
+            });
+        
         });
     });
 
-    // Save Button clicks
-    document.querySelectorAll(".save-button").forEach(saveButton => {
-        saveButton.addEventListener("click", (event) => {
-            event.preventDefault();
-            console.log("save button clicked");
-
-            const task = saveButton.closest(".task");
-            const form = task.closest("form");
-            const taskInput = task.querySelector(".task-input");
-            const taskDescription = task.querySelector(".task-description");
-
-            const exitButton = task.querySelector(".exit-button");
-            const editButton = task.querySelector(".edit-button");
-
-            taskDescription.textContent = taskInput.value;
-
-            task.style.display = "none";
-            exitButton.style.display = "none";
-            taskInput.style.display = "none";
-            taskDescription.style.display = "block";
-            editButton.style.display = "block";
-
-            form.submit();  
-        });
-    });
-
-// Exit Button clicks
-    document.querySelectorAll(".exit-button").forEach(exitButton => {
-        exitButton.addEventListener("click", (event) => {
-            event.preventDefault();
-            console.log("exit button clicked");
-
-            const task = exitButton.closest(".task");
-            const taskDescription = task.querySelector(".task-description");
-            const editButton = task.querySelector(".edit-button");
-            const saveButton = task.querySelector(".save-button");
-            const taskInput = task.querySelector(".task-input");
-            
-            taskDescription.style.display = "block";
-            editButton.style.display = "block";
-            saveButton.style.display = "none";
-            exitButton.style.display = "none";
-            taskInput.style.display = "none";
-
-        });
-    });
-
-    document.querySelectorAll(".task-title").forEach(task => {
-        task.addEventListener("click", function () {
-            const title = this.getAttribute("data-title");
-            const description = this.getAttribute("data-description");
-            const priority = this.getAttribute("data-priority");
-            const dueDate = this.getAttribute("data-duedate");
-
-            document.getElementById("modal-task-title").textContent = title;
-            document.getElementById("modal-description").textContent = description;
-            document.getElementById("modal-priority").textContent = priority;
-            document.getElementById("modal-duedate").textContent = dueDate.toLocaleDateString('en-US');
-            document.getElementById("modal-textarea").textContent = description;
-        });
-    });
 });
-
