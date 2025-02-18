@@ -4,14 +4,10 @@
         <div class="row justify-content-center">
             <div class="col-6 mt-5">
                 <span><h2><%= user.name %>'s Task List</h2>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-                        <label class="form-check-label" for="flexSwitchCheckChecked">Completed</label>
-                    </div>
                 </span>
 
                 <% projects.forEach((project, index) => { %>
-                    <% const projectTasks = tasks.filter(task => task.projectId && task.projectId._id.toString() === project._id.toString()); %>
+                    <% const projectTasks = tasks.filter(task => task.status === "To Do" && task.projectId && task.projectId._id.toString() === project._id.toString()); %>
                     <% if(projectTasks.length > 0) { %>
                 <table class="table">
                     <thead>
@@ -23,29 +19,23 @@
                             <th>Due Date</th>
                             <th>Complete</th>
                         </tr>
-                    
                     </thead>
                     <tbody>
                         <% projectTasks.forEach((task, taskIndex) => { %>
                         <tr>
-                            <td>
-                                <a class="task-title" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#edit-task"
-                                    data-title="<%= task.title %>"
-                                    data-description="<%= task.description %>"
-                                    data-priority="<%= task.priority %>"
-                                    data.duedate="<%= task.dueDate.toISOString().split('T')[0] %>">
-                                    <%= task.title %>
-                                </a>
-                            </td>
+                            <td><%= task.title %></a></td>
                             <td><%= task.projectId.title %></td>
                             <td><%= task.createdBy.name %></td>
                             <td><%= task.priority %></td>
                             <td><%= task.dueDate.toLocaleDateString('en-US') %></td>
-                            <td><input type="checkbox" name="complete"></td>
+
+                            <td>
+                                <form class="completion-form" action="/schedule/completeTask/<%= task.id %>" method="POST">
+                                    <input type="hidden" name="taskId" value="<%= task.id %>">
+                                    <input class="check-box" type="checkbox" name="status" value="on" <% task.status === "Completed" ? "checked": "" %> onchange="this.form.submit()">
+                                </form>
+                            </td>
                         </tr>
-        
                         <tr>
                             <td colspan="6" value="<%= task.description %>" display="none" class="update-task">
                                 <form  id="updated-description-form" action="/schedule/updateTaskDesc/<%= task.id %>" method="POST">
@@ -59,21 +49,53 @@
                                 </form>
                             </td>
                         </tr>
-
-                        
-                        
                         <% }); %>  
                     </tbody>
                 </table>
-
-                
-
                  <% } %>
                 <% }); %>
             </div>
         </div>
     </section>
 
+    <section class="completed-tasks">
+        <div class="row justify-content-center">
+            <div class="col-6 mt-5">
+                <span><h2><%= user.name %>'s Completed Task List</h2>
+                </span>
+
+                <% projects.forEach((project, index) => { %>
+                    <% const projectTasks = tasks.filter(task => task.status === "Completed" && task.projectId && task.projectId._id.toString() === project._id.toString()); %>
+                    <% if(projectTasks.length > 0) { %>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Task Title</th>
+                            <th>Project</th>
+                            <th>Completed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% projectTasks.forEach((task, taskIndex) => { %>
+                        <tr>
+                            <td><%= task.title %></a></td>
+                            <td><%= task.projectId.title %></td>
+                            <td>
+                                <form class="move-back" action="/schedule/completeTask/<%= task.id %>" method="POST">
+                                    <input type="hidden" name="taskId" value="<%= task._id %>">
+                                    <input class="check-box" type="checkbox" name="status" value="<%= task.status === 'Completed' ? 'off' : 'on' %>" <%= task.status === "Completed" ? "checked": "" %> onchange="this.form.submit()">
+                                </form>
+                            </td>
+                        </tr>
+                    
+                        <% }); %>  
+                    </tbody>
+                </table>
+                 <% } %>
+                <% }); %>
+            </div>
+        </div>
+    </section>
 
     <section id="all-projects">
         <div class="row justify-content-center">
@@ -87,24 +109,25 @@
                             <th>Assigned To</th>
                             <th>Due Date</th>
                         </tr>
-                        
                     </thead>
                     <tbody>
                         <% for(let i = 0; i < allTasks.length; i++){ %>
-                            <tr>
-                                <td><%= allTasks[i].projectId.title %></td>
-                                <td><%= allTasks[i].title %></td>
-                                <td><%= allTasks[i].assignedTo.name %></td>
-                                <td><%= allTasks[i].dueDate.toLocaleDateString('en-US') %></td>
-                            </tr>
-                    
+                            <% if(allTasks[i].status === "To Do"){ %>
+                                <tr>
+                                    <td><%= allTasks[i].projectId.title %></td>
+                                    <td><%= allTasks[i].title %></td>
+                                    <td><%= allTasks[i].assignedTo.name %></td>
+                                    <td><%= allTasks[i].dueDate.toLocaleDateString('en-US') %></td>
+                                </tr>
+                            <% } %>
                         <% } %>
                     </tbody>
-
                 </table>
             </div>
         </div>
     </section>
+
+    
 
     <!-- bootstrap modal for adding a project and creating a task -->
     <div id="add-project" class="modal fade">
@@ -185,110 +208,7 @@
             </div>
         </div>
       </div>
-
-      <!-- modal for the task  -->
-    <% tasks.forEach(task => { %>
-      <div id="edit-task" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content rounded-4 shadow create-project">
-                <div class="modal-header p-5 pb-4 border-bottom-0">
-                    <h1 class="fw-bold mb-0 fs-2"><span id="modal-task-title"></span></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-5 pt-0">
-                    <form  id="updated-description-form" action="/schedule/updateTaskDesc/<%= task.id %>" method="POST">
-                        <div class="task">
-                        
-                            <p  class="task-description" id="modal-description"><%= task.description %></p>
-                            <input type="hidden" name="taskId" value="<%= task.id %>">
-                            <textarea id="modal-textarea" class="task-input w-100 mb-2 rounded-3" name="description" style="display: none;" value="<%= task.id %>"></textarea>
-                            <button class="edit-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: block;" type="submit">Add Notes</button>
-                            <button class="save-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Save</button>
-                            <button class="exit-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Exit</button>
-                        </div>
-                        
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <% }); %>
-
-
-      
-
 <!-- End of bootstrap model -->
 
-
-    <!-- <section  class="create-project">
-        <div class="row justify-content-center">
-            <div class="col-6 mt-5">
-                <h2>Create a New Project</h2>
-                <form action="/schedule/createProject" method="POST">
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" name="title">
-                    </div>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description"></textarea>
-                    </div>
-                    <button type="submit" class="btn bg-info" style="color:white" value="Upload">Submit</button>
-                </form>
-            </div>
-        </div>
-    </section> -->
-
-    <!-- <section id="add-task" class="create-task">
-        <div class="row justify-content-center">
-            <div class="col-6 mt-5">
-                <h2>Create a New Task</h2>
-                <form action="/schedule/createTask" method="POST">
-                    <div class="mb-3">
-                        <label for="projectId" class="form-label">Project</label>
-                        <select class="form-control" id="projectId" name="projectId">
-                            <option label=" "></option>
-                            
-                            !!!!!FOR LOOP -- ADD BACK IF NEEDED!!!!
-
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" name="title">
-                    </div>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="assignedTo" class="form-label">Assigned To</label>
-                        <select class="form-control" id="assignedTo" name="assignedTo">
-                            <option label=" "></option>
-
-
-                            !!!!!FOR LOOP -- ADD BACK IF NEEDED!!!!!
-
-
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="priority" class="form-label">Priority</label>
-                        <select class="form-control" id="priority" name="priority">
-                            <option value="low">Low</option>
-                            <option value="medium" selected>Medium</option>
-                            <option value="high">High</option>
-                            <option value="critical">Critical</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="dueDate" class="form-label">Due Date</label>
-                        <input type="date" class="form-control" id="dueDate" name="dueDate">
-                    </div>
-                    <button type="submit" class="btn bg-info" style="color:white" value="Upload">Submit</button>
-                </form>
-            </div>
-        </div>      
-    </section>   -->
 </main>
 <%- include('partials/footer') -%>

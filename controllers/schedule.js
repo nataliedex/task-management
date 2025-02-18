@@ -89,5 +89,19 @@ module.exports = {
           res.status(500).send("Server Error");
         }
       },
+
+      completeTask: async (req, res) => {
+        try {
+            const { taskId, status } = req.body;
+            const newStatus = status === "on" ? "Completed" : "To Do";
+            await Task.findByIdAndUpdate(taskId, { status: newStatus });
+            res.redirect('/schedule');
+
+        } catch (err) {
+            console.error("Error completing the task", err);
+            res.status(500).send("Server Error");
+        }
+      },
+
     
 }
