@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
             desc.style.display = "none";
             editText.style.display = "block";
             editText.value = desc.innerText;
-            saveButton.style.display = "block";
-            exitButton.style.display = "block";
+            saveButton.style.display = "inline-block";
+            exitButton.style.display = "inline-block";
 
             exitButton.addEventListener("click", (e) => {
                 e.preventDefault();
@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
             saveButton.addEventListener("click", () => {
                 console.log("Save button clicked");
-
                 desc.innerText = editText.value; 
 
                 form.submit();
