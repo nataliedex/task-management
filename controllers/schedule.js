@@ -103,5 +103,21 @@ module.exports = {
         }
       },
 
+      updateTaskAssignment: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { newUserId } = req.body;
+
+            await Task.findByIdAndUpdate(id, { assignedTo: newUserId });
+            res.json({ success: true, message: "Task reassigned successfully!" });
+
+            window.location.reload();
+            
+        } catch (err) {
+            console.error("Error updating task assignment", err);
+            res.status(500).send("Server Error");
+        }
+      },
+
     
 }
