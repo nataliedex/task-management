@@ -110,8 +110,6 @@ module.exports = {
 
             await Task.findByIdAndUpdate(id, { assignedTo: newUserId });
             res.json({ success: true, message: "Task reassigned successfully!" });
-
-            window.location.reload();
             
         } catch (err) {
             console.error("Error updating task assignment", err);

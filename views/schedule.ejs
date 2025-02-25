@@ -40,7 +40,7 @@
                             <td colspan="6" value="<%= task.description %>" display="none" class="update-task">
                                 <form  id="updated-description-form" action="/schedule/updateTaskDesc/<%= task.id %>" method="POST">
                                     <div class="task">
-                                        <p display="block" class="task-description" value="<%= task.description %>"><%= task.description %></p>
+                                        <p display="block" class="task-description" value="<%= task.description %>"><strong>Notes: </strong><%= task.description %></p>
                                         <input type="hidden" name="taskId" value="<%= task.id %>">
                                         <textarea id="edit-text" class="task-input w-100 mb-2 rounded-3" name="description" style="display: none;" value="<%= task.id %>"></textarea>
                                         <button class="save-button w-20 mb-2 btn btn-sm rounded-3 bg-info" style="color:white; display: none;" type="submit">Save</button>
