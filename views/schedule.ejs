@@ -27,8 +27,14 @@
                             <td><%= task.projectId.title %></td>
                             <td><%= task.createdBy.name %></td>
                             <td><%= task.priority %></td>
-                            <td><%= task.dueDate.toLocaleDateString('en-US') %></td>
-
+                            <td 
+                                <% const today = new Date() %>
+                                (<%=today%> <= <%=task.dueDate%> ? style="color:red;" : style="color:green;")
+                            >
+                                    
+                                
+                                <%= task.dueDate.toLocaleDateString("en-US") %>
+                            </td>
                             <td>
                                 <form class="completion-form" action="/schedule/completeTask/<%= task.id %>" method="POST">
                                     <input type="hidden" name="taskId" value="<%= task.id %>">
@@ -123,7 +129,10 @@
                                                         <td><%= allTasks[i].projectId.title %></td>
                                                         <td><%= allTasks[i].title %></td>
                                                         <td><%= allTasks[i].assignedTo.name %></td>
-                                                        <td><%= allTasks[i].dueDate.toLocaleDateString('en-US') %></td>
+                                                        <td
+                                                        <% const today = new Date() %>
+                                                        (<%=today%> <= <%=allTasks[i].dueDate%> ? style="color:red;" : style="color:green;")
+                                                        ><%= allTasks[i].dueDate.toLocaleDateString('en-US') %></td>
                                                     </tr>
                                                 <% } %>
                                             <% } %>
